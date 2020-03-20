@@ -142,7 +142,7 @@ ThreadTest()
     switch (testnum) {
     case 1:
 	//ThreadTest1();
-	//ThreadTest_Dllist2();
+	ThreadTest_Dllist2();
     ThreadTest_Dllist3();
     break;
     default:
