@@ -142,7 +142,8 @@ ThreadTest()
     switch (testnum) {
     case 1:
 	//ThreadTest1();
-	ThreadTest_Dllist2();
+	//ThreadTest_Dllist2();//test+1
+    ThreadTest_Dllist3()
     break;
     default:
 	printf("No test specified.\n");
