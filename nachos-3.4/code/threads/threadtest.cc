@@ -73,7 +73,7 @@ void SimpleThread2(int which)
     }
 
 }
-void ThreadTest_Dllist(){
+void ThreadTest_Dllist2(){
     list_t = ddlist_Genegate(5);
     //ddlist_Print_Remove(list_t);
     new_items = (int *)malloc(6*sizeof(int));
@@ -142,7 +142,7 @@ ThreadTest()
     switch (testnum) {
     case 1:
 	//ThreadTest1();
-	//ThreadTest_Dllist();
+	//ThreadTest_Dllist2();
     ThreadTest_Dllist3();
     break;
     default:
