@@ -16,6 +16,7 @@
 
 // testnum is set in main.cc
 int testnum = 1;
+int N = 1;
 
 // qinlonghu
 Dllist *list_t; 
@@ -59,54 +60,49 @@ ThreadTest1()
     SimpleThread(0);
     
 }
-//----------------------Test 2-----------------------------///
+
+
+//----------------------dllist Test 2-----------------------------///
 //qinlonghu 
 void SimpleThread2(int which)
 {
-    int N = 3;
+    ddlist_Genegate(list_t, N, which);
+    currentThread->Yield();
     
-    for (int i = 0; i < N; i++) {
-        list_t->Append(&new_items[index_it]);
-        printf("*** thread %d: insert %d to dllist\n:", which, new_items[index_it++]);
-        list_t->ShowAll();
-        //currentThread->Yield();
-    }
+    ddlist_Print_Remove(list_t, N, which);
 
 }
-void ThreadTest_Dllist2(){
-    list_t = ddlist_Genegate(5);
-    //ddlist_Print_Remove(list_t);
-    new_items = (int *)malloc(6*sizeof(int));
-    new_items[0] = 11;new_items[1] = 11;new_items[2] = 12;
-    new_items[3] = 12;new_items[4] = 13;new_items[5] = 13;
-
+void ThreadTest_Dllist2(int T_Thread){
+    
     DEBUG('t', "Entering ThreadTest_Dllist");
-    
-    Thread *t = new Thread("forked thread");
-    t->Fork(SimpleThread2, 3);
-    SimpleThread2(2);
+    Thread **ts = (Thread **)malloc((T_Thread-1)*sizeof(Thread*));
+    for(int i = 0;i< T_Thread-1;i++){
+        ts[i] = new Thread("forked thread");
+        ts[i]->Fork(SimpleThread2, i+2);
+    }
+    //t->Fork(SimpleThread2, 2);
+    //t->Fork(SimpleThread2, 3);
+    SimpleThread2(1);
+
 }
 
-//----------------------Test 3-----------------------------///
+//-----------------dllist Test 3(producer & consumer)---------------///
 //qinlonghu 
-void SimpleThread3_1(int which) //Remove
-{
-    int N = 3;
-    
+void SimpleThread3_1(int which) //consumer
+{   
     for (int i = 0; i < N; i++) {
         int *keyPtr = new int();
         int *item;
         item = (int *)list_t->Remove(keyPtr);
-        printf("*** thread %d: remove %d to dllist\n:", which, *item);
+        printf("*** thread %d: remove %d from dllist\n:", which, *item);
         list_t->ShowAll();
         //currentThread->Yield();
     }
 
 }
 
-void SimpleThread3_2(int which) //Prepend
+void SimpleThread3_2(int which) //producer
 {
-    int N = 3;
     
     for (int i = 0; i < N; i++) {
         list_t->Prepend(&new_items[index_it]);
@@ -118,7 +114,7 @@ void SimpleThread3_2(int which) //Prepend
 }
 
 void ThreadTest_Dllist3(){
-    list_t = ddlist_Genegate(4);
+    //ddlist_Genegate(list_t,4);
     //ddlist_Print_Remove(list_t);
     new_items = (int *)malloc(3*sizeof(int));
     new_items[0] = 11;new_items[1] = 12;new_items[2] = 13;
@@ -126,9 +122,12 @@ void ThreadTest_Dllist3(){
     DEBUG('t', "Entering ThreadTest_Dllist");
     
     Thread *t = new Thread("forked thread");
-    t->Fork(SimpleThread3_2, 2);
-    SimpleThread3_1(1);
+    t->Fork(SimpleThread3_1, 2);
+    SimpleThread3_2(1);
 }
+
+//-------------------------Test 4----------------------------------------
+
 
 
 //----------------------------------------------------------------------
@@ -137,14 +136,34 @@ void ThreadTest_Dllist3(){
 //----------------------------------------------------------------------
 
 void
-ThreadTest()
+ThreadTest(int T_Test,int T_Thread,int T_Num)
 {
+    list_t = new Dllist();
+    N = T_Num;
+
     switch (testnum) {
     case 1:
-	//ThreadTest1(); //test-merged
-	//ThreadTest_Dllist2();//test+3
-    ThreadTest_Dllist3()
-    break;
+    {
+        switch(T_Test){
+            case 1:
+                ThreadTest_Dllist2(T_Thread);     //ture, not finished
+                break;
+            case 2:
+                ThreadTest_Dllist2(T_Thread);     //test
+                break;
+            case 3:
+                ThreadTest_Dllist3(); //fake : T_Thread is 2
+                break;
+            default:
+                printf("T_Test must be 1(right),2(bad1),3(bad2).\n");
+                break;
+        }
+        //ThreadTest1(); //test-merged
+        //ThreadTest_Dllist2();//test+3
+        //ThreadTest_Dllist3()
+        break;
+    }
+	
     default:
 	printf("No test specified.\n");
 	break;

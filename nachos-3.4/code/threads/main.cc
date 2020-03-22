@@ -61,7 +61,7 @@ extern int testnum;
 
 // External functions used by this file
 
-extern void ThreadTest(void), Copy(char *unixFile, char *nachosFile);
+extern void ThreadTest(int T_Test,int T_Thread,int T_Num), Copy(char *unixFile, char *nachosFile);
 extern void Print(char *file), PerformanceTest(void);
 extern void StartProcess(char *file), ConsoleTest(char *in, char *out);
 extern void MailTest(int networkID);
@@ -80,11 +80,32 @@ extern void MailTest(int networkID);
 //		ex: "nachos -d +" -> argv = {"nachos", "-d", "+"}
 //----------------------------------------------------------------------
 
+void test_dllist()
+{
+	printf("----------- test dllist -----------\n");
+    printf("Genegate dllist(item, key)...\n");
+    Dllist *list_tmp = new Dllist();
+    ddlist_Genegate(list_tmp,4,1);
+    list_tmp->ShowAll();
+    printf("Remove All of dllist(item, key)...\n");
+	ddlist_Print_Remove(list_tmp,4,1);
+	printf("----------- test end -----------\n");
+}
+
 int
 main(int argc, char **argv)
 {
     int argCount;			// the number of arguments 
 					// for a particular command
+	// qin
+	int t_Test,t_Thread,t_Num;
+	if(argc == 4){
+		t_Test = atoi(argv[1]);
+		t_Thread = atoi(argv[2]);
+		t_Num = atoi(argv[3]);
+		printf( "(t_test,T,N)= (%d, %d,%d)\n\n",t_Test,t_Thread,t_Num);
+	}//qin
+
 
     DEBUG('t', "Entering main");
     (void) Initialize(argc, argv);
@@ -102,15 +123,16 @@ main(int argc, char **argv)
         break;
       }
     }
+    printf("testnum = %d\n", testnum);
     //test hello
     hello();
 
     //test ddlist
-	Dllist *list = ddlist_Genegate(8);
-	ddlist_Print_Remove(list);
+    //test_dllist();
+    
 
 	//test thread
-    ThreadTest();
+    ThreadTest(t_Test,t_Thread,t_Num);
 #endif
 
     for (argc--, argv++; argc > 0; argc -= argCount, argv += argCount) {
