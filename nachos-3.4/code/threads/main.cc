@@ -97,14 +97,16 @@ main(int argc, char **argv)
     int argCount;			// the number of arguments 
 					// for a particular command
 	// qin
-	int t_Test,t_Thread,t_Num;
+	int t_Test = 1, t_Thread =3 ,t_Num = 2;
 	if(argc == 4){
 		t_Test = atoi(argv[1]);
 		t_Thread = atoi(argv[2]);
 		t_Num = atoi(argv[3]);
-		printf( "\n(t_test,T,N)= (%d, %d,%d)\n\n",t_Test,t_Thread,t_Num);
 	}//qin
-
+	else{
+		printf( "######\nIn order to test 1-6\nYou can add parameter (t_test,T,N) to ./nachos\n######\n");
+	}
+	printf( "\n(t_test,T,N)= (%d, %d,%d)\n\n",t_Test,t_Thread,t_Num);
 
     DEBUG('t', "Entering main");
     (void) Initialize(argc, argv);

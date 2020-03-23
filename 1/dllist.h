@@ -12,11 +12,12 @@ public:
     Dllist();
     ~Dllist();
 
-    void Prepend(void *item);   //在前面链表头部插入
-    void Append(void *item);    //在在链表尾部插入
-    void *Remove(int *keyPtr, int test_id, int thread_id, int No_id);  //按 优先键 删除
-    void *Remove(int *keyPtr); //重载一下
-    
+    void Prepend(void *item);   //在表头 插入
+    void Append(void *item);    //在表尾 插入
+    void *Remove(int *keyPtr);  //从表头 删除
+    //重载 for thread test
+    void *Remove(int *keyPtr, int test_id, int thread_id, int No_id);  
+
     bool isEmpty();
     void ShowAll();
 

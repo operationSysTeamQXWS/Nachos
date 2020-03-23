@@ -59,17 +59,12 @@ void Dllist::Append(void *item) {
 //从 表头 删除， 记录 优先键 （用于并发编程）
 void* Dllist::Remove(int *keyPtr, int test_id, int thread_id, int No_id){
     DllElement* element = first;
-    
     if(test_id == 2){
         printf("******* removing No.%d in thread %d ********\n",No_id,thread_id);
         currentThread->Yield(); //(free error)test2 for thread
     }
-    if(test_id == 3){
-        currentThread->Yield(); 
-    }
-    
-    ASSERT(!isEmpty());//isEmpty()时，终止程序。
 
+    ASSERT(!isEmpty());//isEmpty()时，终止程序。
     void* item = element->item;
     *keyPtr = element->key;
 
@@ -85,7 +80,7 @@ void* Dllist::Remove(int *keyPtr, int test_id, int thread_id, int No_id){
         printf("******* removing No.%d in thread %d ********\n",No_id,thread_id);
         currentThread->Yield(); //(null error)test3 for thread
     }
-    
+
     delete element; //no sure for thread test
     
     if(test_id == 1){
