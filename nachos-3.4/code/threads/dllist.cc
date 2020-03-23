@@ -64,6 +64,9 @@ void* Dllist::Remove(int *keyPtr, int test_id, int thread_id, int No_id){
         printf("******* removing No.%d in thread %d ********\n",No_id,thread_id);
         currentThread->Yield(); //(free error)test2 for thread
     }
+    if(test_id == 3){
+        currentThread->Yield(); 
+    }
     
     ASSERT(!isEmpty());//isEmpty()时，终止程序。
 
@@ -74,7 +77,7 @@ void* Dllist::Remove(int *keyPtr, int test_id, int thread_id, int No_id){
         first = NULL;
         last = NULL;
     } else {
-        first = element->next;  //not sure or element->next / first->next
+        first = first->next;  //not sure or element->next / first->next
         first->prev = NULL;
     }
 

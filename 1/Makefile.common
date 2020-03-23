@@ -38,7 +38,10 @@ AS = as -32
 PROGRAM = nachos
 
 THREAD_H =../threads/copyright.h\
+	../threads/hello.h\
 	../threads/list.h\
+	../threads/dllist.h\
+	../threads/dllist_driver.h\
 	../threads/scheduler.h\
 	../threads/synch.h \
 	../threads/synchlist.h\
@@ -49,9 +52,12 @@ THREAD_H =../threads/copyright.h\
 	../machine/sysdep.h\
 	../machine/stats.h\
 	../machine/timer.h
-
+        
 THREAD_C =../threads/main.cc\
+	../threads/hello.cc\
 	../threads/list.cc\
+	../threads/dllist.cc\
+	../threads/dllist_driver.cc\
 	../threads/scheduler.cc\
 	../threads/synch.cc \
 	../threads/synchlist.cc\
@@ -66,7 +72,7 @@ THREAD_C =../threads/main.cc\
 
 THREAD_S = ../threads/switch.s
 
-THREAD_O =main.o list.o scheduler.o synch.o synchlist.o system.o thread.o \
+THREAD_O =main.o hello.o list.o dllist.o dllist_driver.o scheduler.o synch.o synchlist.o system.o thread.o\
 	utility.o threadtest.o interrupt.o stats.o sysdep.o timer.o
 
 USERPROG_H = ../userprog/addrspace.h\

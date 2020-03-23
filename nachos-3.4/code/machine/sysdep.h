@@ -62,7 +62,6 @@ int atoi(const char *str);
 double atof(const char *str);
 int abs(int i);
 
-
 #include <stdio.h>		// for printf, fprintf
 #include <string.h>		// for DEBUG, etc.
 }

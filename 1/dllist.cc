@@ -1,11 +1,12 @@
 extern "C" {
 #include <assert.h>
 #include <cstdio>
-#define ASSERT(expression)  assert(expression)
+//#define ASSERT(expression)  assert(expression) //
 }
 
 #include "copyright.h"
 #include "dllist.h"
+#include "system.h"         //Assert may work badly with above!!!
 //const int NULL = 0;
 
 DllElement::DllElement(void *itemPtr, int sortKey){
@@ -55,14 +56,56 @@ void Dllist::Append(void *item) {
         last = element;
     }
 }
-//从 表头 删除， 记录 优先键
+//从 表头 删除， 记录 优先键 （用于并发编程）
+void* Dllist::Remove(int *keyPtr, int test_id, int thread_id, int No_id){
+    DllElement* element = first;
+    
+    if(test_id == 2){
+        printf("******* removing No.%d in thread %d ********\n",No_id,thread_id);
+        currentThread->Yield(); //(free error)test2 for thread
+    }
+    if(test_id == 3){
+        currentThread->Yield(); 
+    }
+    
+    ASSERT(!isEmpty());//isEmpty()时，终止程序。
+
+    void* item = element->item;
+    *keyPtr = element->key;
+
+    if (first == last) {    // list had one item, now has none
+        first = NULL;
+        last = NULL;
+    } else {
+        first = first->next;  //not sure or element->next / first->next
+        first->prev = NULL;
+    }
+
+    if(test_id == 3){
+        printf("******* removing No.%d in thread %d ********\n",No_id,thread_id);
+        currentThread->Yield(); //(null error)test3 for thread
+    }
+    
+    delete element; //no sure for thread test
+    
+    if(test_id == 1){
+        printf("******* removing No.%d in thread %d ********\n",No_id,thread_id);
+        printf("Remove: (item %d, key %d) \n",*(int *)item, *keyPtr);
+        currentThread->Yield();
+        //(right)test1 for thread
+    }
+    else{
+        printf("Remove: (item %d, key %d) \n",*(int *)item, *keyPtr);
+    }
+    
+    return item;
+}
 void* Dllist::Remove(int *keyPtr){
     DllElement* element = first;
     
     ASSERT(!isEmpty());//isEmpty()时，终止程序。
 
     void* item = element->item;
-
     *keyPtr = element->key;
 
     //printf("(%d,%d)\n", *(int *)item, *keyPtr);
@@ -71,20 +114,19 @@ void* Dllist::Remove(int *keyPtr){
         last = NULL;
     } else {
         //printf("[%d]]\n", first->key);
-        first = element->next;
+        first = first->next;  //not sure or element->next
         //printf("[[%d]\n", first->key);
         first->prev = NULL;
     }
 
-    delete element;     // deallocate list element -- no longer needed
+    delete element; //no sure for thread test //deallocate list element -- no longer needed
     return item;
 } 
-
 void Dllist::SortedInsert(void *item, int sortKey){
     
     DllElement *element = new DllElement(item,sortKey);
-    //printf("%d,%d|",*(int *)item,sortKey);
-    
+    printf("insert (item %d, key %d)\n",*(int *)item,sortKey);
+
     if(isEmpty()){    //list has no element
         first = element;
         last = element;
@@ -118,6 +160,7 @@ void Dllist::SortedInsert(void *item, int sortKey){
     last = element;
     return ;
 
+
 }    //按 优先键 插入
 
 void Dllist::SortedRemove(int sortKey){
@@ -146,8 +189,9 @@ void Dllist::SortedRemove(int sortKey){
 }        // 按 优先键 删除
 
 void Dllist::ShowAll(){
-    DllElement* p = first;
     printf("Show All: ");
+    DllElement* p = first;
+    
     while(p){
         printf("(%d,%d) ", *((int *)p->item), p->key);
         p=p->next;
