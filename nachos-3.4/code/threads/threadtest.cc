@@ -17,7 +17,8 @@
 // testnum is set in main.cc
 int testnum = 1;
 int N = 1;
-
+int Test_id;
+int T_Thread;
 // qinlonghu
 Dllist *list_t; 
 int *new_items;
@@ -62,33 +63,31 @@ ThreadTest1()
 }
 
 
-//----------------------dllist Test 2-----------------------------///
+//----------------------dllist remove Test Interupt-----------------------------///
 //qinlonghu 
-void SimpleThread2(int which)
+void SimpleThread123(int which)
 {
     ddlist_Genegate(list_t, N, which);
     currentThread->Yield();
     
-    ddlist_Print_Remove(list_t, N, which);
+    ddlist_Print_Remove(list_t,Test_id,which,N);//int test_id ,int thread_id, int N
 
 }
-void ThreadTest_Dllist2(int T_Thread){
+void ThreadTest_Dllist123(){
     
     DEBUG('t', "Entering ThreadTest_Dllist");
     Thread **ts = (Thread **)malloc((T_Thread-1)*sizeof(Thread*));
     for(int i = 0;i< T_Thread-1;i++){
         ts[i] = new Thread("forked thread");
-        ts[i]->Fork(SimpleThread2, i+2);
+        ts[i]->Fork(SimpleThread123, i+2);
     }
-    //t->Fork(SimpleThread2, 2);
-    //t->Fork(SimpleThread2, 3);
-    SimpleThread2(1);
+    SimpleThread123(1);
 
 }
 
-//-----------------dllist Test 3(producer & consumer)---------------///
+//-----------------dllist Test(producer & consumer)---------------///
 //qinlonghu 
-void SimpleThread3_1(int which) //consumer
+void SimpleThread4_1(int which) //consumer
 {   
     for (int i = 0; i < N; i++) {
         int *keyPtr = new int();
@@ -101,7 +100,7 @@ void SimpleThread3_1(int which) //consumer
 
 }
 
-void SimpleThread3_2(int which) //producer
+void SimpleThread4_2(int which) //producer
 {
     
     for (int i = 0; i < N; i++) {
@@ -113,7 +112,7 @@ void SimpleThread3_2(int which) //producer
 
 }
 
-void ThreadTest_Dllist3(){
+void ThreadTest_Dllist4(){
     //ddlist_Genegate(list_t,4);
     //ddlist_Print_Remove(list_t);
     new_items = (int *)malloc(3*sizeof(int));
@@ -122,12 +121,9 @@ void ThreadTest_Dllist3(){
     DEBUG('t', "Entering ThreadTest_Dllist");
     
     Thread *t = new Thread("forked thread");
-    t->Fork(SimpleThread3_1, 2);
-    SimpleThread3_2(1);
+    t->Fork(SimpleThread4_1, 2);
+    SimpleThread4_2(1);
 }
-
-//-------------------------Test 4----------------------------------------
-
 
 
 //----------------------------------------------------------------------
@@ -136,31 +132,27 @@ void ThreadTest_Dllist3(){
 //----------------------------------------------------------------------
 
 void
-ThreadTest(int T_Test,int T_Thread,int T_Num)
+ThreadTest(int T_test,int T_thread,int T_num)
 {
     list_t = new Dllist();
-    N = T_Num;
+    Test_id = T_test;
+    T_Thread = T_thread;
+    N = T_num;
 
     switch (testnum) {
     case 1:
     {
-        switch(T_Test){
+        switch(Test_id){
             case 1:
-                ThreadTest_Dllist2(T_Thread);     //ture, not finished
-                break;
             case 2:
-                ThreadTest_Dllist2(T_Thread);     //test
-                break;
             case 3:
-                ThreadTest_Dllist3(); //fake : T_Thread is 2
+                ThreadTest_Dllist123(); //1:right,2:free error,3:null error
                 break;
             default:
-                printf("T_Test must be 1(right),2(bad1),3(bad2).\n");
+                printf("T_Test must be 1(right),2(free error),3(null error).\n");
                 break;
         }
         //ThreadTest1(); //test-merged
-        //ThreadTest_Dllist2();//test+3
-        //ThreadTest_Dllist3()
         break;
     }
 	

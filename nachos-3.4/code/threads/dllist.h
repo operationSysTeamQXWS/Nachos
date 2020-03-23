@@ -14,7 +14,7 @@ public:
 
     void Prepend(void *item);   //在前面链表头部插入
     void Append(void *item);    //在在链表尾部插入
-    void *Remove(int *keyPtr, int thread_id, int No_id);  //按 优先键 删除
+    void *Remove(int *keyPtr, int test_id, int thread_id, int No_id);  //按 优先键 删除
     void *Remove(int *keyPtr); //重载一下
     
     bool isEmpty();

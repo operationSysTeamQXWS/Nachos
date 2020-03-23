@@ -11,4 +11,4 @@ extern "C"
 //#include <sys/time.h>
 
 void ddlist_Genegate(Dllist* randomDLL, int N, int thread_id);
-void ddlist_Print_Remove(Dllist* list, int N, int thread_id);
+void ddlist_Print_Remove(Dllist* list, int test_id ,int thread_id, int N);

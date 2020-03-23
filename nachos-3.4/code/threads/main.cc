@@ -88,7 +88,7 @@ void test_dllist()
     ddlist_Genegate(list_tmp,4,1);
     list_tmp->ShowAll();
     printf("Remove All of dllist(item, key)...\n");
-	ddlist_Print_Remove(list_tmp,4,1);
+	ddlist_Print_Remove(list_tmp,0,0, 4);
 	printf("----------- test end -----------\n");
 }
 
@@ -103,7 +103,7 @@ main(int argc, char **argv)
 		t_Test = atoi(argv[1]);
 		t_Thread = atoi(argv[2]);
 		t_Num = atoi(argv[3]);
-		printf( "(t_test,T,N)= (%d, %d,%d)\n\n",t_Test,t_Thread,t_Num);
+		printf( "\n(t_test,T,N)= (%d, %d,%d)\n\n",t_Test,t_Thread,t_Num);
 	}//qin
 
 

@@ -57,10 +57,13 @@ void Dllist::Append(void *item) {
     }
 }
 //从 表头 删除， 记录 优先键 （用于并发编程）
-void* Dllist::Remove(int *keyPtr, int thread_id, int No_id){
+void* Dllist::Remove(int *keyPtr, int test_id, int thread_id, int No_id){
     DllElement* element = first;
-    printf("******* removing No.%d in thread %d ********\n",No_id,thread_id);
-    currentThread->Yield(); //test for thread
+    
+    if(test_id == 2){
+        printf("******* removing No.%d in thread %d ********\n",No_id,thread_id);
+        currentThread->Yield(); //(free error)test2 for thread
+    }
     
     ASSERT(!isEmpty());//isEmpty()时，终止程序。
 
@@ -71,12 +74,27 @@ void* Dllist::Remove(int *keyPtr, int thread_id, int No_id){
         first = NULL;
         last = NULL;
     } else {
-        first = first->next;  //not sure or element->next
+        first = element->next;  //not sure or element->next / first->next
         first->prev = NULL;
     }
 
+    if(test_id == 3){
+        printf("******* removing No.%d in thread %d ********\n",No_id,thread_id);
+        currentThread->Yield(); //(null error)test3 for thread
+    }
+    
     delete element; //no sure for thread test
-    printf("Remove: (item %d, key %d) \n",*(int *)item, *keyPtr);
+    
+    if(test_id == 1){
+        printf("******* removing No.%d in thread %d ********\n",No_id,thread_id);
+        printf("Remove: (item %d, key %d) \n",*(int *)item, *keyPtr);
+        currentThread->Yield();
+        //(right)test1 for thread
+    }
+    else{
+        printf("Remove: (item %d, key %d) \n",*(int *)item, *keyPtr);
+    }
+    
     return item;
 }
 void* Dllist::Remove(int *keyPtr){

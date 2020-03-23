@@ -32,13 +32,13 @@ void ddlist_Genegate(Dllist* randomDLL, int N, int thread_id){
 	return ;
 }
 
-void ddlist_Print_Remove(Dllist* list, int N, int thread_id){
+void ddlist_Print_Remove(Dllist* list, int test_id ,int thread_id, int N){
 	//printf("Remove N element...\n");
 	int *keyPtr = new int();
 	int *item, i = 0;
 	while(i<N){
 		//printf("xx\n");
-		item = (int *)list->Remove(keyPtr,thread_id, i+1);
+		item = (int *)list->Remove(keyPtr, test_id, thread_id, i+1);
 		//printf("Remove: (item %d, key %d) \n",*item, *keyPtr);
 		i++;
 	}
