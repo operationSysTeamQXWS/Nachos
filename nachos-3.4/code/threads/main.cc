@@ -86,7 +86,6 @@ void test_dllist()
     printf("Genegate dllist(item, key)...\n");
     Dllist *list_tmp = new Dllist();
     ddlist_Genegate(list_tmp,4,1);
-    list_tmp->ShowAll();
     printf("Remove All of dllist(item, key)...\n");
 	ddlist_Print_Remove(list_tmp,0,0, 4);
 	printf("----------- test end -----------\n");
@@ -123,14 +122,14 @@ main(int argc, char **argv)
         break;
       }
     }
-    printf("testnum = %d\n", testnum);
+    //printf("testnum = %d\n", testnum);
+    
     //test hello
-    hello();
+    //hello();
 
     //test ddlist
     //test_dllist();
     
-
 	//test thread
     ThreadTest(t_Test,t_Thread,t_Num);
 #endif
