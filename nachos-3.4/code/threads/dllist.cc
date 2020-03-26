@@ -171,6 +171,11 @@ void Dllist::SortedRemove(int sortKey){
                 DllElement* p2 = p->next;
                 p1->next = p2;
                 p2->prev = p1;
+                if (p == first){
+                    first = p2;
+                }else{
+                    if (p == last) last = p1;
+                }
             }
             delete p;
             isfind = 1;
